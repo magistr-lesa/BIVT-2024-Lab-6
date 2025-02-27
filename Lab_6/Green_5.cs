@@ -24,7 +24,7 @@ namespace Lab_6
             }
             public int[] Marks // Свойство оценок.
             {
-                get { return _marks != null ? (int[])_marks.Clone() : []; }
+                get { return _marks != null ? (int[])_marks.Clone() : null; }
             }
             public Student(string name, string surname)  // Публичный конструктор, принимающий имя и фамилию, инициализирует массив оценок по нулям.
             {
@@ -84,10 +84,7 @@ namespace Lab_6
 
             public Green_5.Student[] Students // Свойство студентов.
             {
-                get
-                {
-                    return _students != null ? (Green_5.Student[])_students.Clone() : [];
-                }
+                get { return _students; }
             }
             public double AvgMark // Высчитываем средний балл в группе.
             {
@@ -109,7 +106,6 @@ namespace Lab_6
                     return totalCount == 0 ? 0 : totalSum / totalCount;
                 }
             }
-
             public Group(string name) // Конкструктор группы.
             {
                 _name = name;
@@ -139,22 +135,25 @@ namespace Lab_6
                 }
                 _studentCount = newLength;
             }
-            public static void SortByAvgMark(Group[] array) // Сортировка по среднему баллу группы. 
+            public static void SortByAvgMark_BubbleSort(Group[] array)
             {
                 if (array == null || array.Length == 0)
                     return;
-                for (int i = 0; i < array.Length - 1; i++)
+                bool swapped;
+                do
                 {
-                    for (int j = i + 1; j < array.Length; j++)
+                    swapped = false;
+                    for (int i = 0; i < array.Length - 1; i++)
                     {
-                        if (array[i].AvgMark < array[j].AvgMark || (array[i].AvgMark == array[j].AvgMark && i > j))
+                        if (array[i].AvgMark < array[i + 1].AvgMark)
                         {
                             Group temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
+                            array[i] = array[i + 1];
+                            array[i + 1] = temp;
+                            swapped = true;
                         }
                     }
-                }
+                } while (swapped);
             }
             public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
             {
