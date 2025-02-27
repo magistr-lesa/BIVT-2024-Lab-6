@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2
+namespace Lab_6
 {
     public class Green_3
     {
@@ -19,8 +19,8 @@ namespace ConsoleApp2
             private int _passedCount; // Для подсчёта кол-ва людей, прошедших все экзамены.
             public Student(string name, string surname)  // Публичный конструктор, принимающий имя и фамилию, инициализирует массив оценок по нулям.
             {
-                _name = name ?? "";
-                _surname = surname ?? "";
+                _name = name;
+                _surname = surname;
                 _marks = new int[3];
                 for (int i = 0; i < _marks.Length; i++)
                 {
@@ -29,15 +29,15 @@ namespace ConsoleApp2
                 _isExpelled = false;
                 _examCount = 0;
             }
-            public readonly string Name // Свойство имени.
+            public string Name // Свойство имени.
             {
-                get { return _name ?? ""; }
+                get { return _name; }
             }
-            public readonly string Surname // Свойство фамилии.
+            public string Surname // Свойство фамилии.
             {
-                get { return _surname ?? ""; }
+                get { return _surname; }
             }
-            public readonly int[] Marks // Свойство оценок.
+            public int[] Marks // Свойство оценок.
             {
                 get { return _marks != null ? (int[])_marks.Clone() : []; }
             }
@@ -61,7 +61,7 @@ namespace ConsoleApp2
             {
                 get
                 {
-                    if (_marks.Length == 0 || _marks == null)
+                    if (_marks == null || _marks.Length == 0)
                     {
                         return false;
                     }
@@ -77,7 +77,7 @@ namespace ConsoleApp2
             }
             public void Exam(int mark) // Студент одноразово проходит экзамен и получает оценку за него.
             {
-                if (_marks.Length == 0 || _marks == null)
+                if (_marks == null || _marks.Length == 0)
                 {
                     return;
                 }
@@ -104,26 +104,26 @@ namespace ConsoleApp2
                     }
                 }
             }
-            public static void SortByAvgMark(Student[] array) // Статический метод сортировки массива студентов по убыванию среднего балла.
+            public static void SortByAvgMark(Student[] array)
             {
                 if (array == null || array.Length == 0)
                     return;
-                Array.Sort(array, (s1, s2) => s2.AvgMark.CompareTo(s1.AvgMark));
+                for (int i = 0; i < array.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < array.Length; j++)
+                    {
+                        if (array[i].AvgMark < array[j].AvgMark || (array[i].AvgMark == array[j].AvgMark && i > j))
+                        {
+                            Student temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                    }
+                }
             }
             public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
             {
                 Console.WriteLine("{0,-12} {1,-10} {2,-15:F2} {3,-10}", Name, Surname, AvgMark, IsExpelled);
-            }
-            public static void PrintAll(Student[] students) // Публично-статичный метод для полного вывода.
-            {
-                Console.WriteLine("{0,-12} {1,-10} {2,-15} {3,-10}", "Name", "Surname", "Average mark", "is expelled");
-                Console.WriteLine(new string('—', 60));
-
-                foreach (var s in students)
-                {
-                    s.Print();
-                }
-                Console.WriteLine(new string('—', 60));
             }
         }
     }
