@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2
+namespace Lab_6
 {
     public class Green_5
     {
@@ -14,22 +14,22 @@ namespace ConsoleApp2
             private string _name; // Его имя.
             private string _surname; // Его фамилия.
             private int[] _marks; // Его оценки. 
-            public readonly string Name // Свойство имени.
+            public string Name // Свойство имени.
             {
-                get { return _name ?? ""; }
+                get { return _name; }
             }
-            public readonly string Surname // Свойство фамилии.
+            public string Surname // Свойство фамилии.
             {
-                get { return _surname ?? ""; }
+                get { return _surname; }
             }
-            public readonly int[] Marks // Свойство оценок.
+            public int[] Marks // Свойство оценок.
             {
                 get { return _marks != null ? (int[])_marks.Clone() : []; }
             }
             public Student(string name, string surname)  // Публичный конструктор, принимающий имя и фамилию, инициализирует массив оценок по нулям.
             {
-                _name = name ?? "";
-                _surname = surname ?? "";
+                _name = name;
+                _surname = surname;
                 _marks = new int[5];
                 for (int i = 0; i < _marks.Length; i++)
                 {
@@ -54,7 +54,7 @@ namespace ConsoleApp2
             }
             public void Exam(int mark) // Студент одноразово проходит экзамен и получает оценку за него.
             {
-                if (_marks.Length == 0 || _marks == null)
+                if (_marks == null || _marks.Length == 0)
                 {
                     return;
                 }
@@ -71,29 +71,18 @@ namespace ConsoleApp2
             {
                 Console.WriteLine("{0,-12} {1,-12} {2,-12:F2} {3, -12}", Name, Surname, AvgMark, string.Join(", ", Marks));
             }
-            public static void PrintAll(Student[] students) // Публично-статичный метод для полного вывода.
-            {
-                Console.WriteLine("{0,-12} {1,-10} {2,-13} {3, -12}", "Name", "Surname", "AvgMark", "Marks");
-                Console.WriteLine(new string('—', 60));
-
-                foreach (var p in students)
-                {
-                    p.Print();
-                }
-                Console.WriteLine(new string('—', 60));
-            }
         }
         public struct Group // Публичная структура группы.
         {
             private string _name; // Название.
             private Green_5.Student[] _students; // Студенты в ней.
             private int _studentCount; // Их количество.
-            public readonly string Name // Свойство имени.
+            public string Name // Свойство имени.
             {
-                get { return _name ?? ""; }
+                get { return _name; }
             }
 
-            public readonly Green_5.Student[] Students // Свойство студентов.
+            public Green_5.Student[] Students // Свойство студентов.
             {
                 get
                 {
@@ -123,7 +112,7 @@ namespace ConsoleApp2
 
             public Group(string name) // Конкструктор группы.
             {
-                _name = name ?? "";
+                _name = name;
                 _students = new Green_5.Student[0];
                 _studentCount = 0;
             }
@@ -150,26 +139,26 @@ namespace ConsoleApp2
                 }
                 _studentCount = newLength;
             }
-            public static void SortByAvgMark(Group[] array) // Сортивровка по среднему баллу группы.
+            public static void SortByAvgMark(Group[] array) // Сортировка по среднему баллу группы. 
             {
-                if (array == null)
+                if (array == null || array.Length == 0)
                     return;
-                Array.Sort(array, (s1, s2) => s2.AvgMark.CompareTo(s1.AvgMark));
+                for (int i = 0; i < array.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < array.Length; j++)
+                    {
+                        if (array[i].AvgMark < array[j].AvgMark || (array[i].AvgMark == array[j].AvgMark && i > j))
+                        {
+                            Group temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                    }
+                }
             }
             public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
             {
                 Console.WriteLine("{0,-12} {1,-15:F2}", Name, AvgMark);
-            }
-            public static void PrintAll(Group[] groups) // Публично-статичный метод для полного вывода.
-            {
-                Console.WriteLine("{0,-12} {1,-10}", "Name", "Average mark");
-                Console.WriteLine(new string('—', 60));
-
-                foreach (var g in groups)
-                {
-                    g.Print();
-                }
-                Console.WriteLine(new string('—', 60));
             }
         }
     }
