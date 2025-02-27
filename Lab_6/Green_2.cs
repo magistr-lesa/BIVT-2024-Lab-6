@@ -89,18 +89,21 @@ namespace Lab_6
             {
                 if (array == null || array.Length == 0)
                     return;
-                for (int i = 0; i < array.Length - 1; i++)
+                bool swapped;
+                do
                 {
-                    for (int j = i + 1; j < array.Length; j++)
+                    swapped = false;
+                    for (int i = 0; i < array.Length - 1; i++)
                     {
-                        if (array[i].AvgMark < array[j].AvgMark || (array[i].AvgMark == array[j].AvgMark && i > j))
+                        if (array[i].AvgMark < array[i + 1].AvgMark)
                         {
                             Student temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
+                            array[i] = array[i + 1];
+                            array[i + 1] = temp;
+                            swapped = true;
                         }
                     }
-                }
+                } while (swapped);
             }
             public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
             {
