@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2
+namespace Lab_6
 {
     public class Green_1
     {
@@ -16,8 +16,9 @@ namespace ConsoleApp2
             private string _trainer; // Фамилия тренера.
             private double _result; // Результат.
             private bool _resultFilled; // Заполненность результата.
-            private static readonly double _standard; // Стандарт в виде норматива.
+            private static double _standard; // Стандарт в виде норматива.
             private static int _passedCount; // Счётчик прошедших норматив.
+            private static bool _Printed = false; // Для определения вывода кол-ва людей, прошедших норматив.
             static Participant() // Статичный конструктор для инициализации значений норматива и счётчика.
             {
                 _standard = 100;
@@ -25,29 +26,29 @@ namespace ConsoleApp2
             }
             public Participant(string surname, string group, string trainer) // Публичный конструктор, принимающий фамилию, группу и тренера.
             {
-                this._surname = surname ?? "";
-                this._group = group ?? "";
-                this._trainer = trainer ?? "";
+                this._surname = surname;
+                this._group = group;
+                this._trainer = trainer;
                 this._result = 0;
                 this._resultFilled = false;
             }
-            public readonly string Surname // Публичное свойство фамилии.
+            public string Surname // Публичное свойство фамилии.
             {
-                get { return _surname ?? ""; }
+                get { return _surname; }
             }
-            public readonly string Group // Публичное свойство группы.
+            public string Group // Публичное свойство группы.
             {
-                get { return _group ?? ""; }
+                get { return _group; }
             }
-            public readonly string Trainer  // Публичное свойство тренера.
+            public string Trainer  // Публичное свойство тренера.
             {
-                get { return _trainer ?? ""; }
+                get { return _trainer; }
             }
-            public readonly double Result // Публичное свойство результата.
+            public double Result // Публичное свойство результата.
             {
                 get { return _result; }
             }
-            public readonly bool HasPassed  // Публичное свойство пройденности.
+            public bool HasPassed  // Публичное свойство пройденности.
             {
                 get { return _resultFilled && _result <= _standard && _result > 0; }
             }
@@ -71,22 +72,18 @@ namespace ConsoleApp2
                     }
                 }
             }
-            public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
+            public void Print()
             {
-                Console.WriteLine("{0,-12} {1,-10} {2,-12} {3,-10} {4,-10}", Surname, Group, Trainer, Result.ToString("F2"), HasPassed);
-            }
-            public static void PrintAll(Participant[] participants) // Публично-статичный метод для полного вывода.
-            {
-                Console.WriteLine("{0,-12} {1,-10} {2,-12} {3,-10} {4,-10}", "Surname", "Group", "Trainer", "Result", "Has passed");
-                Console.WriteLine(new string('—', 60));
-
-                foreach (var p in participants)
+                object sync = new object();
+                lock (sync)
                 {
-                    p.Print();
+                    if (!_Printed)
+                    {
+                        Console.WriteLine("Прошли норматив: {0}", PassedTheStandard);
+                        _Printed = true;
+                    }
                 }
-
-                Console.WriteLine(new string('—', 60));
-                Console.WriteLine($"Passed the standard: {PassedTheStandard}");
+                Console.WriteLine("{0,-12} {1,-10} {2,-12} {3,-10} {4,-10}", Surname, Group, Trainer, Result.ToString("F2"), HasPassed);
             }
         }
     }
