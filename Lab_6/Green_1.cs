@@ -74,15 +74,11 @@ namespace Lab_6
             }
             public void Print()
             {
-                object sync = new object();
-                lock (sync)
-                {
-                    if (!_Printed)
+                if (!_Printed)
                     {
                         Console.WriteLine("Прошли норматив: {0}", PassedTheStandard);
                         _Printed = true;
                     }
-                }
                 Console.WriteLine("{0,-12} {1,-10} {2,-12} {3,-10} {4,-10}", Surname, Group, Trainer, Result.ToString("F2"), HasPassed);
             }
         }
