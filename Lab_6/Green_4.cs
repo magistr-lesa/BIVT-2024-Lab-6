@@ -28,13 +28,15 @@ namespace Lab_6
             {
                 get
                 {
-                    return _jumps != null ? (double[])_jumps.Clone() : [];
+                    return _jumps != null ? (double[])_jumps.Clone() : null;
                 }
             }
             public double BestJump // Свойство лучшего из них.
             {
                 get
                 {
+                    if (_jumps == null || _jumps.Length == 0)
+                        return 0;
                     return _bestJump = _jumps.Max();
                 }
             }
@@ -54,22 +56,25 @@ namespace Lab_6
                     _index++;
                 }
             }
-            public static void Sort(Participant[] array) // Статический метод сортировки массива прыгунов по убыванию лучшего прыжка.
+            public static void Sort(Participant[] array)
             {
                 if (array == null || array.Length == 0)
                     return;
-                for (int i = 0; i < array.Length - 1; i++)
+                bool swapped;
+                do
                 {
-                    for (int j = i + 1; j < array.Length; j++)
+                    swapped = false;
+                    for (int i = 0; i < array.Length - 1; i++)
                     {
-                        if (array[i].BestJump < array[j].BestJump || (array[i].BestJump == array[j].BestJump && i > j))
+                        if (array[i].BestJump < array[i + 1].BestJump)
                         {
                             Participant temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
+                            array[i] = array[i + 1];
+                            array[i + 1] = temp;
+                            swapped = true;
                         }
                     }
-                }
+                } while (swapped);
             }
             public void Print() // Публичный метод для вывода информации о необходимых полях структуры.
             {
