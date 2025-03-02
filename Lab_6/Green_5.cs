@@ -135,7 +135,7 @@ namespace Lab_6
                 }
                 _studentCount = newLength;
             }
-            public static void SortByAvgMark_BubbleSort(Group[] array)
+            public static void SortByAvgMark(Group[] array)
             {
                 if (array == null || array.Length == 0)
                     return;
